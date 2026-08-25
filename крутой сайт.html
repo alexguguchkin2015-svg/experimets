@@ -1,0 +1,587 @@
+```html
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEOCAT — Метавселенная</title>
+<link rel="icon" type="image/png" href="https://image.qwenlm.ai/public_source/952ffdb7-bd42-400c-9fcf-b5cde1768144/1c126d4bc-6b28-47db-bb47-8c25766a241b.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/unbounded/wght.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/rubik/wght.css">
+<style>
+  :root{
+    --pink:#ff5fa2; --sun:#ffd23f; --blue:#3d7bff; --green:#2dd4a7; --violet:#8b5cf6;
+    --light-bg:#fff6fb; --ink:#1c2450; --muted:#5a628c;
+    --dark-bg:#06070f; --dark-2:#0b0e1d; --dark-card:#10152c; --neon-text:#eaf2ff;
+    --header-h:74px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-padding-top:calc(var(--header-h) + 14px)}
+  body{font-family:'Rubik',system-ui,sans-serif;background:var(--light-bg);color:var(--ink);overflow-x:hidden}
+  h1,h2,h3,.display{font-family:'Unbounded',sans-serif}
+  img{display:block;max-width:100%}
+  a{text-decoration:none;color:inherit}
+  .wrap{width:min(1160px,92%);margin:0 auto}
+
+  /* ---------- HEADER ---------- */
+  #siteHeader{position:fixed;inset:0 0 auto 0;height:var(--header-h);z-index:100;
+    background:rgba(255,246,251,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid rgba(28,36,80,.08);transition:background .45s,color .45s,border-color .45s}
+  #siteHeader .wrap{height:100%;display:flex;align-items:center;justify-content:space-between;gap:18px}
+  #siteHeader.on-dark{background:rgba(6,7,15,.82);border-bottom-color:rgba(255,255,255,.08);color:var(--neon-text)}
+  .logo{display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none}
+  .cat-logo{width:46px;height:46px;border-radius:50%;object-fit:cover;background:#fff;
+    box-shadow:0 6px 18px rgba(61,123,255,.35);transition:transform .3s}
+  .logo:hover .cat-logo{transform:rotate(-8deg) scale(1.08)}
+  .cat-logo.boop{animation:boop .5s ease}
+  @keyframes boop{30%{transform:scale(1.25) rotate(10deg)}60%{transform:scale(.92)}100%{transform:scale(1)}}
+  .logo b{font-family:'Unbounded';font-weight:800;font-size:1.05rem;letter-spacing:.5px}
+  .logo b i{color:var(--pink);font-style:normal}
+  #meowBubble{position:absolute;top:-6px;left:52px;background:#fff;color:var(--ink);border:2px solid var(--pink);
+    border-radius:14px 14px 14px 4px;padding:4px 12px;font-weight:700;font-size:.85rem;opacity:0;pointer-events:none;
+    transform:translateY(8px) scale(.7);transition:.3s;white-space:nowrap;z-index:110}
+  #meowBubble.show{opacity:1;transform:translateY(0) scale(1)}
+  #mainNav{display:flex;gap:6px;align-items:center}
+  #mainNav a{padding:9px 14px;border-radius:12px;font-weight:600;font-size:.95rem;opacity:.85;transition:.25s}
+  #mainNav a:hover{opacity:1;background:rgba(255,95,162,.14);color:var(--pink)}
+  #siteHeader.on-dark #mainNav a:hover{background:rgba(45,212,167,.14);color:var(--green)}
+  .header-cta{font-family:'Unbounded';font-size:.78rem;font-weight:700;padding:12px 20px;border:none;border-radius:14px;
+    background:linear-gradient(90deg,var(--pink),var(--violet));color:#fff;cursor:pointer;transition:transform .25s,box-shadow .25s;
+    box-shadow:0 8px 22px rgba(255,95,162,.4)}
+  .header-cta:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(255,95,162,.55)}
+  #burger{display:none;background:none;border:none;cursor:pointer;width:42px;height:42px;position:relative;z-index:120}
+  #burger span{position:absolute;left:9px;right:9px;height:3px;border-radius:3px;background:currentColor;transition:.3s}
+  #burger span:nth-child(1){top:13px}#burger span:nth-child(2){top:20px}#burger span:nth-child(3){top:27px}
+  #siteHeader.open #burger span:nth-child(1){top:20px;transform:rotate(45deg)}
+  #siteHeader.open #burger span:nth-child(2){opacity:0}
+  #siteHeader.open #burger span:nth-child(3){top:20px;transform:rotate(-45deg)}
+
+  /* ---------- SUN / MOON ORB ---------- */
+  #orb{position:fixed;top:calc(var(--header-h) + 16px);right:26px;width:54px;height:54px;z-index:90;pointer-events:none}
+  #orbSun,#orbMoon{position:absolute;inset:0;border-radius:50%;transition:opacity .2s linear}
+  #orbSun{background:radial-gradient(circle at 35% 32%,#fff3b0,#ffd23f 58%,#ffb43f);box-shadow:0 0 34px rgba(255,210,63,.85)}
+  #orbMoon{opacity:0;background:
+      radial-gradient(circle at 62% 58%,rgba(90,80,40,.25) 0 9%,transparent 10%),
+      radial-gradient(circle at 38% 72%,rgba(90,80,40,.2) 0 6%,transparent 7%),
+      radial-gradient(circle at 34% 34%,#fffbe2,#efe2a4 70%);
+    box-shadow:0 0 28px rgba(244,233,176,.6)}
+
+  /* ---------- HERO (DAY) ---------- */
+  .hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden}
+  .img-wrap{position:absolute;inset:0;overflow:hidden}
+  .img-wrap img{width:100%;height:118%;object-fit:cover;will-change:transform}
+  .hero-overlay{position:absolute;inset:0;
+    background:linear-gradient(180deg,rgba(255,244,250,.94) 0%,rgba(255,244,250,.62) 38%,rgba(255,244,250,.08) 72%,rgba(255,246,251,0) 100%)}
+  .hero-content{position:relative;z-index:2;padding:calc(var(--header-h) + 40px) 0 90px}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:#fff;border:2px solid rgba(61,123,255,.25);
+    border-radius:999px;padding:8px 18px;font-weight:700;font-size:.85rem;color:var(--blue);box-shadow:0 8px 24px rgba(61,123,255,.18)}
+  .hero-badge .dot{width:9px;height:9px;border-radius:50%;background:var(--green);animation:pulse 1.6s infinite}
+  @keyframes pulse{50%{transform:scale(1.5);opacity:.4}}
+  .hero h1{font-size:clamp(2.3rem,6.4vw,4.8rem);font-weight:900;line-height:1.05;margin:26px 0 20px;letter-spacing:-1px}
+  .hero h1 .grad{background:linear-gradient(90deg,var(--pink),var(--violet) 55%,var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p{max-width:560px;font-size:clamp(1rem,1.6vw,1.2rem);color:var(--muted);line-height:1.65;margin-bottom:34px}
+  .btn-row{display:flex;gap:16px;flex-wrap:wrap}
+  .btn{font-family:'Unbounded';font-weight:700;font-size:.9rem;padding:16px 30px;border-radius:16px;border:none;cursor:pointer;transition:transform .25s,box-shadow .25s}
+  .btn-primary{background:linear-gradient(90deg,var(--pink),var(--violet));color:#fff;box-shadow:0 14px 34px rgba(255,95,162,.4)}
+  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 20px 44px rgba(255,95,162,.55)}
+  .btn-ghost{background:rgba(255,255,255,.75);color:var(--ink);border:2px solid rgba(28,36,80,.15)}
+  .btn-ghost:hover{transform:translateY(-3px);border-color:var(--blue);color:var(--blue)}
+  .float-chip{position:absolute;z-index:3;font-family:'Unbounded';font-weight:700;font-size:.8rem;padding:12px 18px;border-radius:16px;
+    background:rgba(255,255,255,.85);backdrop-filter:blur(6px);box-shadow:0 14px 34px rgba(28,36,80,.16);animation:floaty 6s ease-in-out infinite}
+  .chip-a{top:24%;right:12%;color:var(--pink);animation-delay:.4s}
+  .chip-b{top:44%;right:24%;color:var(--blue);animation-delay:1.4s}
+  .chip-c{top:60%;right:9%;color:var(--green);animation-delay:2.2s}
+  @keyframes floaty{50%{transform:translateY(-18px) rotate(2deg)}}
+  .scroll-hint{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:3;color:var(--muted);font-size:.8rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;animation:hint 2s infinite}
+  @keyframes hint{50%{transform:translate(-50%,8px)}}
+
+  /* ---------- LIGHT SECTIONS ---------- */
+  section.light{padding:100px 0}
+  .sec-head{text-align:center;margin-bottom:56px}
+  .sec-tag{font-family:'Unbounded';font-size:.75rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--pink)}
+  .sec-head h2{font-size:clamp(1.6rem,3.6vw,2.6rem);font-weight:800;margin:14px 0 16px}
+  .sec-head p{max-width:640px;margin:0 auto;color:var(--muted);line-height:1.7}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px}
+  .card{background:#fff;border-radius:22px;padding:32px 26px;box-shadow:0 18px 46px rgba(255,95,162,.12);
+    border:1px solid rgba(28,36,80,.06);transition:transform .35s,box-shadow .35s;position:relative;overflow:hidden}
+  .card::before{content:'';position:absolute;top:0;left:0;right:0;height:5px;background:var(--ac,var(--pink))}
+  .card:hover{transform:translateY(-10px);box-shadow:0 30px 60px rgba(61,123,255,.2)}
+  .card .ico{width:60px;height:60px;border-radius:18px;display:grid;place-items:center;font-size:1.7rem;margin-bottom:20px;
+    background:color-mix(in srgb,var(--ac,var(--pink)) 14%,#fff)}
+  .card h3{font-size:1.05rem;font-weight:700;margin-bottom:12px}
+  .card p{color:var(--muted);font-size:.94rem;line-height:1.65}
+
+  .stats-band{background:linear-gradient(90deg,rgba(255,95,162,.08),rgba(61,123,255,.08));border-block:1px solid rgba(28,36,80,.07)}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px;padding:64px 0;text-align:center}
+  .stat .num{font-family:'Unbounded';font-weight:900;font-size:clamp(1.7rem,3.4vw,2.6rem);
+    background:linear-gradient(90deg,var(--blue),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .stat .lbl{margin-top:8px;color:var(--muted);font-weight:600;font-size:.92rem}
+
+  /* ---------- TRANSITION ---------- */
+  #transitionZone{height:260px;background:linear-gradient(180deg,var(--light-bg) 0%,#e7d7ec 30%,#4b3a63 62%,var(--dark-bg) 100%)}
+
+  /* ---------- DARK ZONE ---------- */
+  .dark-zone{background:var(--dark-bg);color:var(--neon-text);position:relative;overflow:hidden}
+  #starsWrap{position:absolute;inset:0;pointer-events:none}
+  .star{position:absolute;background:#fff;border-radius:50%;animation:twinkle linear infinite}
+  @keyframes twinkle{50%{opacity:.15}}
+
+  .night{position:relative;min-height:88vh;display:flex;align-items:flex-end;overflow:hidden}
+  .night .img-wrap img{height:112%}
+  .night-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,7,15,.85) 0%,rgba(6,7,15,.15) 40%,rgba(6,7,15,.55) 100%)}
+  .night-content{position:relative;z-index:2;padding:120px 0 90px}
+  .night-content .sec-tag{color:var(--sun)}
+  .night-content h2{font-size:clamp(1.8rem,4.4vw,3.2rem);font-weight:900;margin:14px 0 18px;
+    text-shadow:0 0 30px rgba(255,210,63,.45)}
+  .night-content p{max-width:600px;color:#b9c2e8;line-height:1.7}
+  .neon-line{display:flex;gap:10px;margin-top:30px;flex-wrap:wrap}
+  .neon-pill{font-family:'Unbounded';font-size:.72rem;font-weight:700;padding:10px 16px;border-radius:999px;border:1px solid;letter-spacing:1px}
+  .np-g{color:var(--green);border-color:var(--green);box-shadow:0 0 18px rgba(45,212,167,.35),inset 0 0 12px rgba(45,212,167,.15)}
+  .np-b{color:#6ea8ff;border-color:var(--blue);box-shadow:0 0 18px rgba(61,123,255,.4),inset 0 0 12px rgba(61,123,255,.18)}
+  .np-p{color:var(--pink);border-color:var(--pink);box-shadow:0 0 18px rgba(255,95,162,.4),inset 0 0 12px rgba(255,95,162,.18)}
+
+  /* ---------- PRICING (DARK) ---------- */
+  section.dark-sec{padding:110px 0;position:relative;z-index:2}
+  .dark-sec .sec-head p{color:#9aa3c9}
+  .plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:26px;align-items:stretch}
+  .plan{background:var(--dark-card);border:1px solid rgba(255,255,255,.08);border-radius:24px;padding:36px 30px;
+    display:flex;flex-direction:column;transition:transform .35s,box-shadow .35s,border-color .35s;position:relative}
+  .plan:hover{transform:translateY(-10px)}
+  .plan.hit{border-color:var(--pink);box-shadow:0 0 0 1px var(--pink),0 24px 60px rgba(255,95,162,.25)}
+  .plan.selected{border-color:var(--green);box-shadow:0 0 0 1px var(--green),0 24px 60px rgba(45,212,167,.25)}
+  .plan-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,var(--pink),var(--violet));
+    color:#fff;font-family:'Unbounded';font-size:.68rem;font-weight:700;padding:7px 16px;border-radius:999px;letter-spacing:1px}
+  .plan h3{font-size:1.05rem;font-weight:700;color:#cdd6f6}
+  .plan .price{font-family:'Unbounded';font-weight:900;font-size:2rem;margin:16px 0 4px;color:#fff}
+  .plan .price small{font-size:.85rem;font-weight:500;color:#8b93b8}
+  .plan ul{list-style:none;margin:24px 0 30px;display:grid;gap:12px;flex:1}
+  .plan li{display:flex;gap:10px;font-size:.93rem;color:#aab3d6;line-height:1.5}
+  .plan li::before{content:'✦';color:var(--green);flex:none}
+  .plan-btn{font-family:'Unbounded';font-weight:700;font-size:.82rem;padding:15px;border-radius:14px;border:2px solid rgba(255,255,255,.16);
+    background:transparent;color:#fff;cursor:pointer;transition:.3s}
+  .plan-btn:hover{border-color:var(--sun);color:var(--sun);box-shadow:0 0 24px rgba(255,210,63,.3)}
+
+  /* ---------- CALCULATOR ---------- */
+  .calc{margin-top:70px;background:linear-gradient(160deg,#131a36,#0c1024);border:1px solid rgba(255,255,255,.09);
+    border-radius:28px;padding:clamp(28px,4vw,52px);display:grid;grid-template-columns:1.2fr .8fr;gap:44px;
+    box-shadow:0 40px 90px rgba(0,0,0,.5)}
+  .calc h3{font-size:clamp(1.2rem,2.4vw,1.7rem);font-weight:800;margin-bottom:8px}
+  .calc .sub{color:#8b93b8;margin-bottom:26px;line-height:1.6}
+  .opt{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:15px 4px;border-bottom:1px dashed rgba(255,255,255,.1);cursor:pointer}
+  .opt:last-of-type{border-bottom:none}
+  .opt .name{font-weight:600;font-size:.95rem;color:#dfe6ff}
+  .opt .name small{display:block;color:#7d86ad;font-weight:400;font-size:.8rem;margin-top:3px}
+  .opt .cost{font-family:'Unbounded';font-size:.78rem;font-weight:700;color:var(--sun);white-space:nowrap}
+  .opt input{display:none}
+  .sw{flex:none;width:48px;height:27px;border-radius:999px;background:#262d4f;position:relative;transition:.3s;box-shadow:inset 0 2px 6px rgba(0,0,0,.5)}
+  .sw::after{content:'';position:absolute;top:3px;left:3px;width:21px;height:21px;border-radius:50%;background:#8f97bd;transition:.3s}
+  .opt input:checked + .sw{background:var(--green);box-shadow:0 0 16px rgba(45,212,167,.5)}
+  .opt input:checked + .sw::after{left:24px;background:#fff}
+  .calc-right{display:flex;flex-direction:column;gap:20px}
+  .total-box{background:rgba(255,210,63,.07);border:1px solid rgba(255,210,63,.35);border-radius:20px;padding:26px;text-align:center}
+  .total-box .t-lbl{font-size:.8rem;letter-spacing:2px;text-transform:uppercase;color:#c9b25e;font-weight:700}
+  #totalPrice{font-family:'Unbounded';font-weight:900;font-size:clamp(1.8rem,3.6vw,2.7rem);color:var(--sun);
+    text-shadow:0 0 30px rgba(255,210,63,.5);margin-top:10px}
+  .total-note{font-size:.8rem;color:#8b93b8;margin-top:10px}
+  .btn-sun{font-family:'Unbounded';font-weight:800;font-size:.92rem;padding:18px;border:none;border-radius:16px;cursor:pointer;
+    background:linear-gradient(90deg,var(--sun),#ffb43f);color:#241a00;box-shadow:0 14px 40px rgba(255,210,63,.35);transition:transform .25s,box-shadow .25s}
+  .btn-sun:hover{transform:translateY(-3px);box-shadow:0 20px 50px rgba(255,210,63,.5)}
+  .express{display:flex;align-items:center;justify-content:space-between;gap:14px;background:rgba(255,95,162,.08);
+    border:1px solid rgba(255,95,162,.3);border-radius:16px;padding:16px 18px;cursor:pointer}
+  .express .name{font-weight:700;color:#ffc4dd;font-size:.92rem}
+
+  /* ---------- FOOTER ---------- */
+  footer{background:#04050c;border-top:1px solid rgba(255,255,255,.07);padding:70px 0 34px;position:relative;z-index:2}
+  .foot-grid{display:grid;grid-template-columns:1.3fr 1fr 1.2fr;gap:44px;margin-bottom:50px}
+  .foot-grid p{color:#8b93b8;line-height:1.7;font-size:.93rem;margin-top:16px}
+  .foot-grid h4{font-family:'Unbounded';font-size:.85rem;letter-spacing:2px;text-transform:uppercase;color:#cdd6f6;margin-bottom:18px}
+  .foot-links{display:grid;gap:12px}
+  .foot-links a{color:#8b93b8;font-size:.93rem;transition:.25s}
+  .foot-links a:hover{color:var(--green);padding-left:6px}
+  .sub-form{display:flex;gap:10px;margin-top:6px}
+  .sub-form input{flex:1;background:#0d1124;border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:14px 18px;color:#fff;font-family:'Rubik';font-size:.92rem;outline:none;transition:.25s}
+  .sub-form input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(61,123,255,.2)}
+  .sub-form button{font-family:'Unbounded';font-weight:700;font-size:.78rem;padding:14px 20px;border:none;border-radius:14px;
+    background:linear-gradient(90deg,var(--blue),var(--violet));color:#fff;cursor:pointer;transition:transform .25s}
+  .sub-form button:hover{transform:translateY(-2px)}
+  .foot-bottom{border-top:1px solid rgba(255,255,255,.07);padding-top:26px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;color:#5d6590;font-size:.85rem}
+  .foot-bottom b{color:var(--sun)}
+
+  /* ---------- TOAST & REVEAL ---------- */
+  #toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,80px);z-index:200;background:#10152c;color:#fff;
+    border:1px solid var(--green);border-radius:16px;padding:15px 26px;font-weight:600;font-size:.93rem;opacity:0;transition:.45s;
+    box-shadow:0 20px 50px rgba(0,0,0,.5),0 0 24px rgba(45,212,167,.3);max-width:90%;text-align:center}
+  #toast.show{transform:translate(-50%,0);opacity:1}
+  .reveal{opacity:0;transform:translateY(34px);transition:opacity .8s ease,transform .8s ease}
+  .reveal.visible{opacity:1;transform:none}
+  .cards .card:nth-child(2){transition-delay:.12s}.cards .card:nth-child(3){transition-delay:.24s}.cards .card:nth-child(4){transition-delay:.36s}
+  .plans .plan:nth-child(2){transition-delay:.12s}.plans .plan:nth-child(3){transition-delay:.24s}
+
+  @media(max-width:960px){.calc{grid-template-columns:1fr}.foot-grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:860px){
+    #burger{display:block}
+    #mainNav{position:fixed;top:calc(var(--header-h) + 10px);right:14px;flex-direction:column;align-items:stretch;
+      background:#fff;border-radius:20px;padding:14px;box-shadow:0 30px 70px rgba(0,0,0,.25);min-width:210px;
+      opacity:0;pointer-events:none;transform:translateY(-12px);transition:.3s}
+    #siteHeader.on-dark #mainNav{background:#10152c}
+    #siteHeader.open #mainNav{opacity:1;pointer-events:auto;transform:none}
+    .header-cta{display:none}
+    #orb{right:14px;width:44px;height:44px}
+    .chip-b{display:none}
+  }
+  @media(max-width:640px){.foot-grid{grid-template-columns:1fr}.float-chip{display:none}}
+</style>
+</head>
+<body>
+
+<!-- ======= HEADER ======= -->
+<header id="siteHeader">
+  <div class="wrap">
+    <a class="logo" id="logoBtn" href="#top" aria-label="NEOCAT — на главную">
+      <img class="cat-logo" id="catLogo" src="https://image.qwenlm.ai/public_source/952ffdb7-bd42-400c-9fcf-b5cde1768144/1c126d4bc-6b28-47db-bb47-8c25766a241b.png" alt="Голубая кошка NEOCAT">
+      <b>NEO<i>•</i>CAT</b>
+      <span id="meowBubble">Мяу! 🐾</span>
+    </a>
+    <nav id="mainNav">
+      <a href="#about">Мир</a>
+      <a href="#stats">Цифры</a>
+      <a href="#night">Ночной город</a>
+      <a href="#price">Цены</a>
+      <a href="#contacts">Контакты</a>
+    </nav>
+    <button class="header-cta" id="enterBtn">Войти в мир</button>
+    <button id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<!-- ======= SUN / MOON ======= -->
+<div id="orb" aria-hidden="true"><div id="orbSun"></div><div id="orbMoon"></div></div>
+
+<!-- ======= СВЕТЛАЯ ЧАСТЬ ======= -->
+<section class="hero" id="top">
+  <div class="img-wrap"><img id="dayImg" src="https://image.qwenlm.ai/public_source/952ffdb7-bd42-400c-9fcf-b5cde1768144/1454192ab-e302-494e-958f-d0eb06035c74.png" alt="Дневной город метавселенной: розовое небо, жёлтое солнце, жёлтые и синие дома, зелёная, синяя и розовая реклама"></div>
+  <div class="hero-overlay"></div>
+  <span class="float-chip chip-a">VR-МИРЫ</span>
+  <span class="float-chip chip-b">NFT</span>
+  <span class="float-chip chip-c">3D-АВАТАРЫ</span>
+  <div class="wrap hero-content">
+    <span class="hero-badge"><span class="dot"></span> Цифровая вселенная открыта</span>
+    <h1>МЕТАВСЕЛЕННАЯ<br><span class="grad">NEOCAT</span></h1>
+    <p>Бесконечный цифровой город, где розовое небо встречает жёлтое солнце, а неоновые вывески зовут в приключение. Создай аватар, найди друзей и живи второй жизнью — днём и ночью.</p>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="startBtn">Начать путешествие</button>
+      <button class="btn btn-ghost" id="priceBtn">Стоимость аватара</button>
+    </div>
+  </div>
+  <div class="scroll-hint">листай вниз ↓</div>
+</section>
+
+<section class="light" id="about">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-tag">// что это такое</span>
+      <h2>Что такое метавселенная?</h2>
+      <p>Метавселенная — это общий цифровой мир, объединяющий людей, места и предметы. Сюда входят технологии VR и AR, аватары, цифровая экономика и бесконечные виртуальные пространства.</p>
+    </div>
+    <div class="cards">
+      <div class="card reveal" style="--ac:var(--blue)"><div class="ico">🌐</div><h3>Единый цифровой мир</h3><p>Тысячи связанных локаций: от солнечных проспектов до ночных неоновых кварталов — перемещайся мгновенно.</p></div>
+      <div class="card reveal" style="--ac:var(--pink)"><div class="ico">🕶️</div><h3>VR и AR</h3><p>Полное погружение через шлемы виртуальной реальности или дополненная реальность прямо с телефона.</p></div>
+      <div class="card reveal" style="--ac:var(--green)"><div class="ico">🧬</div><h3>Цифровые аватары</h3><p>Создай уникального персонажа: внешность, голос, походка, эмоции и стиль — всё как у тебя… или совсем нет.</p></div>
+      <div class="card reveal" style="--ac:var(--violet)"><div class="ico">💠</div><h3>Экономика и NFT</h3><p>Владей землёй, домами и предметами. Каждый предмет — уникальный токен, который принадлежит только тебе.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="light stats-band" id="stats">
+  <div class="wrap stats">
+    <div class="stat reveal"><div class="num" data-count="128540">0</div><div class="lbl">резидентов уже внутри</div></div>
+    <div class="stat reveal"><div class="num" data-count="860">0</div><div class="lbl">виртуальных миров</div></div>
+    <div class="stat reveal"><div class="num" data-count="42000">0</div><div class="lbl">событий каждый год</div></div>
+    <div class="stat reveal"><div class="num" data-count="99" data-suffix="%">0</div><div class="lbl">время он­лайн — 24/7</div></div>
+  </div>
+</section>
+
+<div id="transitionZone"></div>
+
+<!-- ======= ТЁМНАЯ ЧАСТЬ ======= -->
+<div class="dark-zone">
+  <div id="starsWrap"></div>
+
+  <section class="night" id="night">
+    <div class="img-wrap"><img id="nightImg" src="https://image.qwenlm.ai/public_source/952ffdb7-bd42-400c-9fcf-b5cde1768144/1c31c3f54-75d1-4488-99c0-dc413fe908a9.png" alt="Ночной город метавселенной: чёрное небо, жёлтая луна, те же дома и неоновая реклама"></div>
+    <div class="night-overlay"></div>
+    <div class="wrap night-content reveal">
+      <span class="sec-tag">// после заката</span>
+      <h2>Город никогда не спит</h2>
+      <p>Когда розовое небо гаснет, над теми же жёлтыми и синими домами встаёт жёлтая луна. Неоновая реклама вспыхивает зелёным, синим и розовым — начинаются ночные концерты, гонки дронов и ярмарки NFT.</p>
+      <div class="neon-line">
+        <span class="neon-pill np-g">КОНЦЕРТЫ 24/7</span>
+        <span class="neon-pill np-b">НОЧНЫЕ ГОНКИ</span>
+        <span class="neon-pill np-p">NFT-ЯРМАРКА</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="dark-sec" id="price">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="sec-tag" style="color:var(--sun)">// стоимость создания аватара</span>
+        <h2 style="color:#fff">Выбери свой облик</h2>
+        <p>Три готовых тарифа или собери аватар по деталям в калькуляторе ниже. Оплата — один раз, аватар остаётся с тобой навсегда.</p>
+      </div>
+
+      <div class="plans">
+        <div class="plan reveal">
+          <h3>ГОСТЬ</h3>
+          <div class="price">2 490 ₽</div>
+          <ul>
+            <li>Базовая внешность и тело</li>
+            <li>5 готовых образов одежды</li>
+            <li>Стандартные анимации</li>
+            <li>Чат и базовые эмоции</li>
+          </ul>
+          <button class="plan-btn" data-plan="Гость">Выбрать тариф</button>
+        </div>
+        <div class="plan hit reveal">
+          <span class="plan-badge">ХИТ</span>
+          <h3>РЕЗИДЕНТ</h3>
+          <div class="price">7 990 ₽</div>
+          <ul>
+            <li>Уникальное лицо и фигура</li>
+            <li>25 образов + свой стиль</li>
+            <li>Голос, жесты, эмоции</li>
+            <li>Личная локация-дом</li>
+          </ul>
+          <button class="plan-btn" data-plan="Резидент">Выбрать тариф</button>
+        </div>
+        <div class="plan reveal">
+          <h3>ЛЕГЕНДА</h3>
+          <div class="price">24 990 ₽</div>
+          <ul>
+            <li>3D-скульпт аватара с нуля</li>
+            <li>Motion capture движений</li>
+            <li>NFT-сертификат уникальности</li>
+            <li>Приоритетная поддержка 24/7</li>
+          </ul>
+          <button class="plan-btn" data-plan="Легенда">Выбрать тариф</button>
+        </div>
+      </div>
+
+      <div class="calc reveal" id="calc">
+        <div>
+          <h3>🛠 Собери свой аватар</h3>
+          <p class="sub">Включай опции — итоговая цена пересчитается мгновенно.</p>
+          <label class="opt"><span class="name">Базовый аватар<small>тело, лицо, стандартные анимации</small></span><span class="cost">1 500 ₽</span><input type="checkbox" checked disabled><span class="sw" style="opacity:.5"></span></label>
+          <label class="opt"><span class="name">Уникальное лицо и причёска<small>скульпт по твоим фото</small></span><span class="cost">+1 200 ₽</span><input type="checkbox" class="opt-check" data-price="1200"><span class="sw"></span></label>
+          <label class="opt"><span class="name">Гардероб: 10 образов<small>одежда, обувь, головные уборы</small></span><span class="cost">+900 ₽</span><input type="checkbox" class="opt-check" data-price="900"><span class="sw"></span></label>
+          <label class="opt"><span class="name">Эмоции и жесты<small>смех, танцы, приветствия</small></span><span class="cost">+700 ₽</span><input type="checkbox" class="opt-check" data-price="700"><span class="sw"></span></label>
+          <label class="opt"><span class="name">Голос и речь<small>пространственный 3D-звук</small></span><span class="cost">+1 100 ₽</span><input type="checkbox" class="opt-check" data-price="1100"><span class="sw"></span></label>
+          <label class="opt"><span class="name">Анимации походки и танцев<small>12 стилей движения</small></span><span class="cost">+1 300 ₽</span><input type="checkbox" class="opt-check" data-price="1300"><span class="sw"></span></label>
+          <label class="opt"><span class="name">Аура, крылья, аксессуары<small>светящиеся эффекты</small></span><span class="cost">+1 600 ₽</span><input type="checkbox" class="opt-check" data-price="1600"><span class="sw"></span></label>
+          <label class="opt"><span class="name">NFT-сертификат<small>подтверждение уникальности</small></span><span class="cost">+2 000 ₽</span><input type="checkbox" class="opt-check" data-price="2000"><span class="sw"></span></label>
+        </div>
+        <div class="calc-right">
+          <label class="express"><span class="name">⚡ Срочное создание за 24 часа <small style="color:#d78cb0">(×1,5)</small></span><input type="checkbox" id="expressCheck"><span class="sw"></span></label>
+          <div class="total-box">
+            <div class="t-lbl">Итого</div>
+            <div id="totalPrice">1 500 ₽</div>
+            <div class="total-note">оплата один раз · аватар навсегда</div>
+          </div>
+          <button class="btn-sun" id="createBtn">Создать аватар 🚀</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contacts">
+    <div class="wrap">
+      <div class="foot-grid">
+        <div>
+          <a class="logo" href="#top"><img class="cat-logo" src="https://image.qwenlm.ai/public_source/952ffdb7-bd42-400c-9fcf-b5cde1768144/1c126d4bc-6b28-47db-bb47-8c25766a241b.png" alt="NEOCAT"><b>NEO<i>•</i>CAT</b></a>
+          <p>Метавселенная голубой кошки: солнечные проспекты днём и неоновые кварталы ночью. Строим общий цифровой дом с 2024 года.</p>
+        </div>
+        <div>
+          <h4>Навигация</h4>
+          <div class="foot-links">
+            <a href="#about">О мире</a>
+            <a href="#stats">Цифры</a>
+            <a href="#night">Ночной город</a>
+            <a href="#price">Стоимость аватара</a>
+          </div>
+        </div>
+        <div>
+          <h4>Будь в курсе</h4>
+          <p style="margin:0 0 16px">Новости миров и скидки на аватаров — раз в неделю.</p>
+          <form class="sub-form" id="subForm">
+            <input type="email" id="subEmail" placeholder="твой@email.ru" required>
+            <button type="submit">Ок</button>
+          </form>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <span>© 2026 <b>NEO•CAT</b> — метавселенная. Все права защищены.</span>
+        <span>сделано с 💙 и мяу-кодом на JavaScript</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<div id="toast" role="status"></div>
+
+<script>
+(function(){
+  'use strict';
+  var header = document.getElementById('siteHeader');
+  var orbSun = document.getElementById('orbSun');
+  var orbMoon = document.getElementById('orbMoon');
+  var dayImg = document.getElementById('dayImg');
+  var nightImg = document.getElementById('nightImg');
+  var transZone = document.getElementById('transitionZone');
+  var nightSec = document.getElementById('night');
+  var toastEl = document.getElementById('toast');
+  var totalEl = document.getElementById('totalPrice');
+
+  /* ---------- плавный скролл ---------- */
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      var target = document.querySelector(a.getAttribute('href'));
+      if(target){ e.preventDefault(); target.scrollIntoView({behavior:'smooth'}); header.classList.remove('open'); }
+    });
+  });
+  document.getElementById('startBtn').addEventListener('click', function(){ document.getElementById('about').scrollIntoView({behavior:'smooth'}); });
+  document.getElementById('priceBtn').addEventListener('click', function(){ document.getElementById('price').scrollIntoView({behavior:'smooth'}); });
+  document.getElementById('enterBtn').addEventListener('click', function(){ showToast('Добро пожаловать в NEOCAT! 🐾 Мир загружается…'); });
+
+  /* ---------- бургер ---------- */
+  document.getElementById('burger').addEventListener('click', function(){ header.classList.toggle('open'); });
+
+  /* ---------- кошка мяу ---------- */
+  var meow = document.getElementById('meowBubble');
+  var catLogo = document.getElementById('catLogo');
+  var meowTimer = null;
+  document.getElementById('logoBtn').addEventListener('click', function(){
+    catLogo.classList.remove('boop'); void catLogo.offsetWidth; catLogo.classList.add('boop');
+    meow.classList.add('show');
+    clearTimeout(meowTimer);
+    meowTimer = setTimeout(function(){ meow.classList.remove('show'); }, 1500);
+  });
+
+  /* ---------- скролл: шапка, солнце/луна, параллакс ---------- */
+  var darkStart = 0, ticking = false;
+  function measure(){
+    darkStart = transZone.getBoundingClientRect().top + window.scrollY - 60;
+  }
+  function onScroll(){
+    var y = window.scrollY;
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    var p = Math.min(1, Math.max(0, max ? y / max : 0));
+    orbSun.style.opacity = (1 - p).toFixed(3);
+    orbMoon.style.opacity = p.toFixed(3);
+    header.classList.toggle('on-dark', y > darkStart);
+    dayImg.style.transform = 'translate3d(0,' + (y * 0.16).toFixed(1) + 'px,0)';
+    var nightTop = nightSec.getBoundingClientRect().top;
+    if(nightTop < window.innerHeight){
+      nightImg.style.transform = 'translate3d(0,' + ((nightTop - window.innerHeight) * -0.08).toFixed(1) + 'px,0)';
+    }
+    ticking = false;
+  }
+  window.addEventListener('scroll', function(){ if(!ticking){ ticking = true; requestAnimationFrame(onScroll); } }, {passive:true});
+  window.addEventListener('resize', function(){ measure(); onScroll(); });
+  window.addEventListener('load', function(){ measure(); onScroll(); });
+  measure(); onScroll();
+
+  /* ---------- появление блоков ---------- */
+  var revealIO = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('visible'); revealIO.unobserve(en.target); } });
+  }, {threshold:.15});
+  document.querySelectorAll('.reveal').forEach(function(el){ revealIO.observe(el); });
+
+  /* ---------- счётчики ---------- */
+  function fmtNum(n){ return n.toLocaleString('ru-RU'); }
+  var countIO = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(!en.isIntersecting) return;
+      var el = en.target, target = parseInt(el.dataset.count, 10), suffix = el.dataset.suffix || '';
+      var t0 = performance.now(), dur = 1600;
+      countIO.unobserve(el);
+      (function step(t){
+        var k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+        el.textContent = fmtNum(Math.round(target * e)) + suffix;
+        if(k < 1) requestAnimationFrame(step);
+      })(t0);
+    });
+  }, {threshold:.6});
+  document.querySelectorAll('.num[data-count]').forEach(function(el){ countIO.observe(el); });
+
+  /* ---------- звёзды в тёмной зоне ---------- */
+  var starsWrap = document.getElementById('starsWrap');
+  for(var s = 0; s < 90; s++){
+    var st = document.createElement('span');
+    st.className = 'star';
+    var size = (Math.random() * 2.2 + 1).toFixed(1);
+    st.style.width = size + 'px'; st.style.height = size + 'px';
+    st.style.left = (Math.random() * 100).toFixed(2) + '%';
+    st.style.top = (Math.random() * 100).toFixed(2) + '%';
+    st.style.animationDuration = (Math.random() * 3 + 2).toFixed(2) + 's';
+    st.style.animationDelay = (Math.random() * 4).toFixed(2) + 's';
+    starsWrap.appendChild(st);
+  }
+
+  /* ---------- калькулятор аватара ---------- */
+  var BASE_PRICE = 1500;
+  var expressCheck = document.getElementById('expressCheck');
+  var shownTotal = BASE_PRICE;
+  function calcSum(){
+    var sum = BASE_PRICE;
+    document.querySelectorAll('.opt-check:checked').forEach(function(c){ sum += parseInt(c.dataset.price, 10); });
+    if(expressCheck.checked) sum = Math.round(sum * 1.5);
+    return sum;
+  }
+  function tweenTotal(to){
+    var from = shownTotal, t0 = performance.now(), dur = 450;
+    (function step(t){
+      var k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+      shownTotal = from + (to - from) * e;
+      totalEl.textContent = fmtNum(Math.round(shownTotal)) + ' ₽';
+      if(k < 1) requestAnimationFrame(step);
+    })(t0);
+  }
+  function recalc(){ tweenTotal(calcSum()); }
+  document.querySelectorAll('.opt-check, #expressCheck').forEach(function(c){ c.addEventListener('change', recalc); });
+
+  /* ---------- тарифы ---------- */
+  document.querySelectorAll('.plan-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.plan').forEach(function(p){ p.classList.remove('selected'); });
+      btn.closest('.plan').classList.add('selected');
+      showToast('Тариф «' + btn.dataset.plan + '» выбран ✨');
+      document.getElementById('calc').scrollIntoView({behavior:'smooth', block:'center'});
+    });
+  });
+  document.getElementById('createBtn').addEventListener('click', function(){
+    showToast('Заявка принята! Твой аватар стоит ' + fmtNum(calcSum()) + ' ₽ 🚀');
+  });
+
+  /* ---------- форма подписки ---------- */
+  document.getElementById('subForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    var em = document.getElementById('subEmail');
+    if(em.value && em.checkValidity()){
+      showToast('Готово! Письмо-портал летит на ' + em.value + ' 💌');
+      em.value = '';
+    }
+  });
+
+  /* ---------- toast ---------- */
+  var toastTimer = null;
+  function showToast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toastEl.classList.remove('show'); }, 2800);
+  }
+})();
+</script>
+</body>
+</html>
+```
